@@ -141,14 +141,8 @@ impl HTTPResponse {
     }
 }
 
-// impl Display for HTTPResponse {
-//     fn fmt(&self, f: &mut std::fmt::Formatter<'_>) -> std::fmt::Result {
-//         write!(f, "HTTPResponse {{ status: {:?}, headers: {:?}, body: {:?} }}", self.status, self.headers, self.body)
-//     }
-// }
-
-impl ToString for HTTPResponse {
-    fn to_string(&self) -> String {
+impl Display for HTTPResponse {
+    fn fmt(&self, f: &mut std::fmt::Formatter<'_>) -> std::fmt::Result {
         let mut res = format!("HTTP/1.1 {} {}\r\n", self.status.code(), self.status);
         for (key, value) in &self.headers {
             res.push_str(&format!("{}: {}\r\n", key, value));
@@ -157,9 +151,9 @@ impl ToString for HTTPResponse {
         if let Some(body) = &self.body {
             res.push_str(body);
         }
-        res    }
+        write!(f, "{}", res)
+    }
 }
-
 #[derive(Serialize, Deserialize, Debug, Clone, PartialEq, Eq, Hash)]
 pub enum HTTPStatus {
     // 1xx
